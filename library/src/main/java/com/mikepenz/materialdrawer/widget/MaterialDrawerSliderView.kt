@@ -769,7 +769,7 @@ open class MaterialDrawerSliderView @JvmOverloads constructor(context: Context, 
     @JvmOverloads
     fun setSelection(identifier: Long, fireOnClick: Boolean = true) {
         val select = adapter.getSelectExtension()
-        select.deselect()
+        select.deselectByIdentifiers(select.selectedItems.map { it.identifier }.toSet())
         select.selectByIdentifier(identifier, false, true)
 
         //we also have to call the general notify
