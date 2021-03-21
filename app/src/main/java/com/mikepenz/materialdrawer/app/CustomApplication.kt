@@ -5,14 +5,15 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.widget.ImageView
 import androidx.multidex.MultiDexApplication
-import com.bumptech.glide.Glide
+import coil.clear
+import coil.load
 import com.mikepenz.iconics.Iconics
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.utils.backgroundColorRes
 import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
-import com.mikepenz.materialdrawer.util.DrawerUtils
+import com.mikepenz.materialdrawer.util.getPlaceHolder
 
 /**
  * Created by mikepenz on 27.03.15.
@@ -39,11 +40,14 @@ class CustomApplication : MultiDexApplication() {
         //initialize and create the image loader logic
         DrawerImageLoader.init(object : AbstractDrawerImageLoader() {
             override fun set(imageView: ImageView, uri: Uri, placeholder: Drawable, tag: String?) {
-                GlideApp.with(imageView.context).load(uri).placeholder(placeholder).into(imageView)
+                imageView.load(uri) {
+                    allowHardware(false)
+                    placeholder(placeholder)
+                }
             }
 
             override fun cancel(imageView: ImageView) {
-                Glide.with(imageView.context).clear(imageView)
+                imageView.clear()
             }
 
             override fun placeholder(ctx: Context, tag: String?): Drawable {
@@ -51,7 +55,7 @@ class CustomApplication : MultiDexApplication() {
                 //default tags are accessible via the DrawerImageLoader.Tags
                 //custom ones can be checked via string. see the CustomUrlBasePrimaryDrawerItem LINE 111
                 return when (tag) {
-                    DrawerImageLoader.Tags.PROFILE.name -> DrawerUtils.getPlaceHolder(ctx)
+                    DrawerImageLoader.Tags.PROFILE.name -> getPlaceHolder(ctx)
                     DrawerImageLoader.Tags.ACCOUNT_HEADER.name -> IconicsDrawable(ctx, " ").apply { backgroundColorRes = R.color.primary; sizeDp = 56 }
                     "customUrlItem" -> IconicsDrawable(ctx, " ").apply { backgroundColorRes = R.color.md_red_500; sizeDp = 56 }
                     //we use the default one for

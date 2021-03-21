@@ -1,56 +1,70 @@
 buildscript {
+    apply from: 'configurations.gradle'
+
     ext {
         release = [
-                versionName: "8.0.0-rc02",
-                versionCode: 8000
+                versionName: "8.3.3",
+                versionCode: 8033
         ]
 
         setup = [
-                compileSdk: 29,
-                buildTools: "29.0.2",
+                compileSdk: 30,
+                buildTools: "30.0.2",
                 minSdk    : 16,
-                targetSdk : 29
+                targetSdk : 30
         ]
 
         versions = [
-                multiDex         : '2.0.1',
-                annotation       : '1.1.0',
-                recyclerView     : '1.1.0',
-                core             : '1.1.0',
-                material         : '1.1.0',
-                appcompat        : '1.1.0',
-                drawerlayout     : '1.1.0-alpha04',
-                constraintLayout : '2.0.0-beta4',
-                cardview         : '1.0.0',
-                kotlin           : "1.3.70",
-                fastadapter      : "5.0.0",
-                iconics          : "5.0.0-a04",
-                aboutLibs        : "8.0.0",
-                navigation       : "2.2.1",
-                slidingpaneLayout: "1.0.0"
+                multiDex          : '2.0.1',
+                annotation        : '1.1.0',
+                recyclerView      : '1.1.0',
+                core              : '1.3.2',
+                material          : '1.3.0',
+                appcompat         : '1.2.0',
+                drawerlayout      : '1.1.1',
+                constraintLayout  : '2.0.4',
+                cardview          : '1.0.0',
+                kotlin            : "1.4.30",
+                fastadapter       : "5.3.4",
+                iconics           : "5.2.6",
+                aboutLibs         : "8.8.2",
+                navigation        : "2.3.3",
+                detekt            : '1.15.0',
+                slidingpaneLayout : "1.1.0",
+                swiperefreshLayout: "1.1.0"
         ]
     }
 
     repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.3'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+        classpath 'com.android.tools.build:gradle:4.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.navigation}"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${versions.detekt}"
         classpath "com.mikepenz.aboutlibraries.plugin:aboutlibraries-plugin:${versions.aboutLibs}"
     }
 }
 
 allprojects {
+    group "com.mikepenz"
+
     repositories {
         google()
-        jcenter()
         mavenCentral()
+        jcenter()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+
+subprojects {
+    apply from: "$rootDir/detekt.gradle"
+
+    dependencies {
+        detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:${versions.detekt}"
     }
 }

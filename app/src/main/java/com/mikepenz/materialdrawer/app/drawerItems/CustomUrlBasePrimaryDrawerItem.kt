@@ -10,7 +10,7 @@ import com.mikepenz.materialdrawer.holder.ImageHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.BaseDrawerItem
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
-import com.mikepenz.materialdrawer.util.DrawerUtils.setDrawerVerticalPadding
+import com.mikepenz.materialdrawer.util.setDrawerVerticalPadding
 import com.mikepenz.materialdrawer.util.themeDrawerItem
 
 /**
@@ -19,9 +19,7 @@ import com.mikepenz.materialdrawer.util.themeDrawerItem
 abstract class CustomUrlBasePrimaryDrawerItem<T, VH : RecyclerView.ViewHolder> : BaseDrawerItem<T, VH>() {
 
     var description: StringHolder? = null
-        private set
     var descriptionTextColor: ColorHolder? = null
-        private set
 
     fun withIcon(url: String): T {
         this.icon = ImageHolder(url)
@@ -64,9 +62,6 @@ abstract class CustomUrlBasePrimaryDrawerItem<T, VH : RecyclerView.ViewHolder> :
         //set the identifier from the drawerItem here. It can be used to run tests
         viewHolder.itemView.id = hashCode()
 
-        //set the item selected if it is
-        viewHolder.itemView.isSelected = isSelected
-
         //get the correct color for the background
         val selectedColor = getSelectedColor(ctx)
         //get the correct color for the text
@@ -74,7 +69,7 @@ abstract class CustomUrlBasePrimaryDrawerItem<T, VH : RecyclerView.ViewHolder> :
         val shapeAppearanceModel = getShapeAppearanceModel(ctx)
 
         //set the background for the item
-        themeDrawerItem(ctx, viewHolder.view, selectedColor, isSelectedBackgroundAnimated, shapeAppearanceModel)
+        themeDrawerItem(ctx, viewHolder.view, selectedColor, isSelectedBackgroundAnimated, shapeAppearanceModel, isSelected = isSelected)
         //set the text for the name
         StringHolder.applyTo(this.name, viewHolder.name)
         //set the text for the description or hide
@@ -99,5 +94,8 @@ abstract class CustomUrlBasePrimaryDrawerItem<T, VH : RecyclerView.ViewHolder> :
 
         //for android API 17 --> Padding not applied via xml
         setDrawerVerticalPadding(viewHolder.view)
+
+        //set the item selected if it is
+        viewHolder.itemView.isSelected = isSelected
     }
 }
